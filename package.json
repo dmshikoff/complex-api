@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev:front": "live-server public",
-    "dev:back": "nodemon app.js"
+    "dev:back": "nodemon ./server/app.js"
   },
   "keywords": [],
   "author": "",
