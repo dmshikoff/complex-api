@@ -29,10 +29,23 @@ function create(req, res, next){
     if(authorName < 1){
         return next({status: 400, message:'requires author id'})
     }
-    const book = model.create(req.body.name, req.body.borrowed, req.body.desc, req.body.authorName)
+    const book = model.create(req.body)
     if(book.data){
       return res.status(201).send({ data: book.data })
     }
 }
 
-module.exports = { getAll, getOne, create }
+function update(req, res, next){
+  if(!req.body.name && !req.body.authorID && !req.body.borrowed && !req.body.desc){
+    return next({ status: 400, message: "Please provide update data" })
+  }
+  const book = model.update(req.params.id, req.body)
+  if(book.data){
+    return res.status(200).send({ data: book.data })
+  }
+  else if(book.error) {
+    return next({ status: 404, message: book.error })
+  }
+}
+
+module.exports = { getAll, getOne, create, update }

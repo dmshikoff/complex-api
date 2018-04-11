@@ -5,6 +5,6 @@ const controller = require('../server/controller/books')
 router.get('/', controller.getAll)
 router.get('/:id', controller.getOne)
 router.post('/', controller.create)
-
+router.put('/:id', controller.update)
 
 module.exports = router
