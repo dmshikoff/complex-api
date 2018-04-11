@@ -4,8 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev:front": "live-server public",
-    "dev:back": "nodemon ./server/app.js"
+    "dev": "nodemon ./server/app.js"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +12,6 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
-    "live-server": "^1.2.0",
     "morgan": "^1.9.0",
     "nodemon": "^1.17.3",
     "shortid": "^2.2.8"
