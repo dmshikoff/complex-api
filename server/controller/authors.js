@@ -25,6 +25,7 @@ function create(req, res, next){
     }
 }
 
+module.exports = { getAll, getOne, create }
 
 
 
@@ -47,4 +48,4 @@ function create(req, res, next){
 
 
 
-  module.exports = { getAll, getOne, create, update, remove }
+

@@ -7,7 +7,7 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 
 app.use('/books', require('../routes/books'))
-app.use('/authors', require('./routes/authors'))
+app.use('/authors', require('../routes/authors'))
 
 app.use(function(req, res, next){
   next({status: 404, message: 'Route not found' })
