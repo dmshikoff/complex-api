@@ -1,1 +1,1 @@
-const model = require('../models/books')
+const model = require('../model/books')
