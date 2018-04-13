@@ -4,7 +4,10 @@ const controller = require('../server/controller/books')
 
 router.get('/', controller.getAll)
 router.get('/:id', controller.getOne)
+router.get('/:id/authors', controller.getAllAuthorsOfABook)
+router.get('/:id/authors/:authorId', controller.getOneAuthorOfABook)
 router.post('/', controller.create)
 router.put('/:id', controller.update)
+router.delete('/:id', controller.remove)
 
 module.exports = router
