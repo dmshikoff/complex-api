@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const shortid = require('shortid')
 const file = path.join(__dirname, 'booksdb.json')
+const authorFile = path.join(__dirname, 'authorsdb.json')
 
 
 //get all books//
@@ -42,6 +43,8 @@ function getOneAuthorOfABook(bookId, authorId){
     }
 }
 
+//get one particular book//
+
 function getOne(id){
     const contents = fs.readFileSync(file, 'utf-8')
     const books = JSON.parse(contents)
@@ -55,6 +58,40 @@ function getOne(id){
     }
 }
 
+//create an author from a particular book//
+
+function createAuthorFromBook(id, body){
+    const books = getAll()
+    const book = books.data.find(book => book.id === id)
+    const authorContents = fs.readFileSync(authorFile, 'utf-8')
+    const authors = JSON.parse(authorContents)
+    if(body.firstName){
+        var firstName = body.firstName
+    }
+    else{
+        return { error: 'Missing author first name'}
+    }
+    if(body.lastName){
+        var lastName = body.lastName
+    }
+    else{
+        return { error: 'Missing author last name'}
+    }
+    if(book){
+        const newAuthorId = shortid.generate()
+        const author = { firstName, lastName, id: newAuthorId }
+        book.authorId.push(newAuthorId)
+        fs.writeFileSync(file, JSON.stringify(books.data))
+        authors.push(author)
+        fs.writeFileSync(authorFile, JSON.stringify(authors))
+  
+    return { data: book }
+    }
+    
+}
+
+//create one book//
+
 function create({name, borrowed, desc, authorId}){
     const contents = fs.readFileSync(file, 'utf-8')
     const books = JSON.parse(contents)
@@ -65,16 +102,17 @@ function create({name, borrowed, desc, authorId}){
     return { data: book }
 }
 
+//update a book//
+
 function update(id, {name, authorId, borrowed, desc}){
     const contents = fs.readFileSync(file, 'utf-8')
     let books = JSON.parse(contents)
     const book = books.find(book => book.id === id)
-    console.log(id, book, books)
   
     if(name){
         book.name = name
     }
-    if(authorID ){
+    if(authorId ){
         book.authorId = authorId
     }
     if(borrowed && (borrowed === 'true' || borrowed === 'false')){
@@ -89,6 +127,27 @@ function update(id, {name, authorId, borrowed, desc}){
     fs.writeFileSync(file, JSON.stringify(books))
     return { data: book}
   }
+
+// update an author from a book//
+
+function updateAuthorFromBook(bookId, authorId, body){
+    const authContents = fs.readFileSync(authorFile, 'utf-8')
+    let authors = JSON.parse(authContents)
+    let author = authors.find(author => author.id === authorId)
+    let index = authors.indexOf(author)
+    if(body.firstName){
+        author.firstName = body.firstName
+    }
+    if(body.lastyName){
+        author.lastName = body.lastName
+    }
+    authors.splice(index, 1, author)
+    fs.writeFileSync(authorFile, JSON.stringify(authors))
+    return { data: author}
+}
+
+
+// remove a book //
 
 function remove(id){
     const contents = fs.readFileSync(file, 'utf-8')
@@ -108,4 +167,4 @@ function remove(id){
 
 
 
-module.exports = { getAll, getOne, getAllAuthorsOfABook, getOneAuthorOfABook, create, update, remove }
+module.exports = { getAll, getOne, getAllAuthorsOfABook, getOneAuthorOfABook, createAuthorFromBook, updateAuthorFromBook, create, update, remove }

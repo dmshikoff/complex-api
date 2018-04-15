@@ -44,6 +44,19 @@ function getOneAuthorOfABook( req, res, next){
   }
 }
 
+//create an author from a book//
+function createAuthorFromBook( req, res, next){
+  const author = model.createAuthorFromBook(req.params.id, req.body)
+  if(author.data){
+    return res.status(200).send({ data: author.data })
+  }
+  else{
+    return next({ status: 404, message: author.error})
+  }
+}
+
+//create a book//
+
 function create(req, res, next){
   let authorId = req.body.authorId
     if(authorId){
@@ -64,6 +77,8 @@ function create(req, res, next){
     }
 }
 
+//update a book//
+
 function update(req, res, next){
   if(!req.body.name && !req.body.authorId && !req.body.borrowed && !req.body.desc){
     return next({ status: 400, message: "Please provide update data" })
@@ -74,6 +89,21 @@ function update(req, res, next){
   }
   else if(book.error) {
     return next({ status: 404, message: book.error })
+  }
+}
+
+//updates an author through a book //
+
+function updateAuthorFromBook( req, res, next) {
+  if(!req.body.firstName && !req.body.lastName){
+    return next({ status: 400, message: "Please provide update data" })
+  }
+  const author = model.updateAuthorFromBook(req.params.id, req.params.authorId, req.body)
+  if(author.data){
+    return res.status(200).send({ data: author.data})
+  }
+  else if(author.error) {
+    return next({ status: 404, message: author.error })
   }
 }
 
@@ -93,4 +123,4 @@ function remove(req, res, next){
 
 
 
-module.exports = { getAll, getOne, getAllAuthorsOfABook, getOneAuthorOfABook, create, update, remove }
+module.exports = { getAll, getOne, getAllAuthorsOfABook, getOneAuthorOfABook, createAuthorFromBook, updateAuthorFromBook, create, update, remove }
