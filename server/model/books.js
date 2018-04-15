@@ -145,7 +145,33 @@ function updateAuthorFromBook(bookId, authorId, body){
     fs.writeFileSync(authorFile, JSON.stringify(authors))
     return { data: author}
 }
+//removes an author id from book and also from author file if no other book has that author//
 
+function removeAuthorFromBook(bookId, authorId){
+    const contents = fs.readFileSync(file, 'utf-8')
+    const books = JSON.parse(contents)
+    const book = books.find(book => book.id === bookId)
+    if(book){
+        book.authorId.splice(book.authorId.indexOf(authorId), 1)
+        fs.writeFileSync(file, JSON.stringify(books))
+        if(!(books.find(obj => obj.authorId.includes(authorId)))){
+            var authorContents = fs.readFileSync(authorFile, 'utf-8')
+            var authors = JSON.parse(authorContents)
+            var author = authors.find(author => author.id === authorId)
+            if(author){
+                authors.splice(authors.indexOf(author), 1)
+                fs.writeFileSync(authorFile, JSON.stringify(authors))
+                return { data: book}
+            }
+            else{
+                return { error: "Author Not Found"}
+            }
+        }
+    }
+    else{
+        return { error: "Book Not Found"}
+    }
+}
 
 // remove a book //
 
@@ -167,4 +193,4 @@ function remove(id){
 
 
 
-module.exports = { getAll, getOne, getAllAuthorsOfABook, getOneAuthorOfABook, createAuthorFromBook, updateAuthorFromBook, create, update, remove }
+module.exports = { getAll, getOne, getAllAuthorsOfABook, getOneAuthorOfABook, createAuthorFromBook, updateAuthorFromBook, removeAuthorFromBook, create, update, remove }

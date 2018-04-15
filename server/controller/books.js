@@ -107,6 +107,18 @@ function updateAuthorFromBook( req, res, next) {
   }
 }
 
+//removes an author id from book and also from author file if no other book has that author//
+
+function removeAuthorFromBook(req, res, next){
+  const book = model.removeAuthorFromBook(req.params.id, req.params.authorId)
+  if(book.data){
+    return res.status(200).send({ data: book.data })
+  }
+  else if(book.error){
+      return next({ status: 404, message: book.error })
+  }
+}
+
 //removes entire book//
 
 function remove(req, res, next){
@@ -119,8 +131,8 @@ function remove(req, res, next){
   }
 }
 
-//removes an author from a book//
 
 
 
-module.exports = { getAll, getOne, getAllAuthorsOfABook, getOneAuthorOfABook, createAuthorFromBook, updateAuthorFromBook, create, update, remove }
+
+module.exports = { getAll, getOne, getAllAuthorsOfABook, getOneAuthorOfABook, createAuthorFromBook, updateAuthorFromBook, removeAuthorFromBook, create, update, remove }

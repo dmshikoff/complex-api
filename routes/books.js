@@ -11,5 +11,6 @@ router.post('/:id/authors', controller.createAuthorFromBook)
 router.put('/:id', controller.update)
 router.put('/:id/authors/:authorId', controller.updateAuthorFromBook)
 router.delete('/:id', controller.remove)
+router.delete('/:id/authors/:authorId', controller.removeAuthorFromBook)
 
 module.exports = router
